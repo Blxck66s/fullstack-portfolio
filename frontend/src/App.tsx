@@ -1,4 +1,4 @@
-import Hero from "./components/hero";
+import Hero from "./components/Hero";
 import { ModeToggle } from "./components/mode-toggle";
 
 function App() {
