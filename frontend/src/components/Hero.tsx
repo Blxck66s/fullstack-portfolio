@@ -1,6 +1,7 @@
 import profilePicture from "@/assets/profile-picture.png";
 import { motion } from "motion/react";
 import { Typewriter } from "react-simple-typewriter";
+import StarBorder from "./animation/StarBorder/StarBorder";
 import { Card, CardHeader } from "./ui/card";
 
 const Hero = () => {
@@ -29,13 +30,13 @@ const Hero = () => {
                 transition: { duration: 0.2, repeat: 0 },
               }}
               animate={{
-                backgroundColor: ["#3b775b", "#72cfa0", "#3b775b"],
-                borderColor: ["#72cfa0"],
+                // backgroundColor: ["#3b775b", "#72cfa0", "#3b775b"],
+                // borderColor: ["#72cfa0"],
                 transition: { duration: 2, repeat: 0, repeatDelay: 0.5 },
               }}
-              className="shadow-positive/50 cursor-pointer rounded-xl border-2 px-2 py-0.5 pr-4 text-[0.8rem] shadow-sm"
+              className="cursor-pointer rounded-3xl text-[0.8rem]"
             >
-              <motion.div>
+              <StarBorder as="button" speed="1s">
                 <motion.p
                   style={{
                     display: "inline-block",
@@ -49,11 +50,12 @@ const Hero = () => {
                     repeat: Infinity,
                     repeatDelay: 0.5,
                   }}
+                  className="m-0 p-0"
                 >
                   👋
                 </motion.p>{" "}
                 Actively seeking work
-              </motion.div>
+              </StarBorder>
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
