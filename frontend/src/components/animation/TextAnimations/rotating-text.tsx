@@ -82,10 +82,13 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
     const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
 
     const splitIntoCharacters = (text: string): string[] => {
+      // @ts-expect-error Intl.Segmenter may not be available in all environments
       if (typeof Intl !== "undefined" && Intl.Segmenter) {
+        // @ts-expect-error Intl.Segmenter may not be available in all environments
         const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
         return Array.from(
           segmenter.segment(text),
+          // @ts-expect-error Intl.Segmenter may not be available in all environments
           (segment) => segment.segment,
         );
       }
