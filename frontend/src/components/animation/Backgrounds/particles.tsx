@@ -236,16 +236,17 @@ const Particles: React.FC<ParticlesProps> = ({
       }
     };
   }, [
-    particleCount,
-    particleSpread,
-    speed,
-    moveParticlesOnHover,
-    particleHoverFactor,
     alphaParticles,
-    particleBaseSize,
-    sizeRandomness,
     cameraDistance,
     disableRotation,
+    moveParticlesOnHover,
+    particleBaseSize,
+    particleColors,
+    particleCount,
+    particleHoverFactor,
+    particleSpread,
+    sizeRandomness,
+    speed,
   ]);
 
   return (

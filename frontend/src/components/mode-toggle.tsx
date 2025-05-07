@@ -1,6 +1,6 @@
 import { Moon, Sun } from "lucide-react";
 
-import { useTheme } from "@/components/theme-provider";
+import { ThemeValue, useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +8,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const themeValues: ThemeValue[] = ["dark", "light", "system"];
+
+const themeItems = themeValues.map((theme) => ({
+  value: theme,
+  label: theme.charAt(0).toUpperCase() + theme.slice(1),
+}));
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -22,15 +29,16 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
+        {themeItems.map((item) => {
+          return (
+            <DropdownMenuItem
+              onClick={() => setTheme(item.value)}
+              key={item.value}
+            >
+              {item.label}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

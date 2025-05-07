@@ -15,12 +15,12 @@ function CustomGreenBadge({ children }: { children?: React.ReactNode }) {
         transition: { duration: 0.2, repeat: 0 },
       }}
       animate={{
-        borderWidth: ["1px", "0px"],
-        borderColor: ["#72cfa0", "#000000"],
-        boxShadow: ["0 0 3px #72cfa0", "0 0 0px #3b775b"],
+        borderWidth: ["1px", "1px"],
+        borderColor: ["#72cfa0", "#3b775b"],
+        boxShadow: ["0 0 4px #72cfa0", "0 0 2px #3b775b"],
         transition: { duration: 2, repeat: 0, repeatDelay: 0.5 },
       }}
-      className="rounded-3xl"
+      className="rounded-[20px]"
     >
       <StarBorder as="button" speed="3s" color="green">
         {children}

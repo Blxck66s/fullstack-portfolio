@@ -37,7 +37,7 @@ function WaveEmoji() {
           repeat: Infinity,
           repeatDelay: 1.5,
         }}
-        className="m-0 p-0"
+        className="m-0 p-0 text-sm"
       >
         👋
       </motion.p>
