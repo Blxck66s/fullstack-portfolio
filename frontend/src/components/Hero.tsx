@@ -4,12 +4,10 @@ import { Cake, MapPinHouse, Mic } from "lucide-react";
 import { motion } from "motion/react";
 import Particles from "./animation/Backgrounds/particles";
 import RotatingText from "./animation/TextAnimations/rotating-text";
-import ShinyGreenText from "./animation/TextAnimations/shiny-green-text";
-import WaveEmoji from "./animation/wave-emoji";
+import OpenToWork from "./OpenToWork";
 import { useTheme } from "./theme-provider";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import CustomGreenBadge from "./ui/custom-green-badge";
-import CustomInfoTag from "./ui/custom-info-tag";
+import { Separator } from "./ui/separator";
 
 const Hero = () => {
   const { theme } = useTheme();
@@ -17,47 +15,45 @@ const Hero = () => {
     theme === "dark" ? ["#FFFFFF", "#FFFFFF"] : ["#000000", "#000000"];
 
   return (
-    <Card className="relative h-full w-full">
+    <Card className="bg-background relative h-full w-full">
+      <div className="absolute top-4 right-4">
+        <OpenToWork />
+      </div>
       <div className="absolute inset-0 z-0">
         <Particles className="h-full w-full" particleColors={particleColors} />
       </div>
-      <CardHeader className="z-1">
-        <div className="flex items-center justify-start gap-5">
-          <motion.img
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            src={profilePicture}
-            alt="Ken's Avatar"
-            className="aspect-square h-25 w-25 rounded-xl object-cover shadow-lg"
-          />
-          <div className="flex w-full flex-col items-start justify-center gap-3">
-            <CustomGreenBadge>
-              <WaveEmoji />{" "}
-              <ShinyGreenText
-                text="Open for work"
-                speed={3}
-                className="pb-1 text-xs font-bold"
-              />
-            </CustomGreenBadge>
+      <CardHeader className="z-1 flex flex-col items-center justify-start gap-5 min-[420px]:flex-row">
+        <motion.img
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          src={profilePicture}
+          alt="Ken's Avatar"
+          className="aspect-square h-auto w-[70%] rounded-xl object-cover shadow-lg min-[420px]:w-1/3"
+        />
+        <div className="flex w-full items-center justify-center">
+          <div className="xs:items-center flex w-fit flex-col gap-3">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-2xl font-bold"
+              className="w-fit text-2xl font-bold min-[420px]:w-full sm:text-4xl"
             >
               Hi, I'm Ken
             </motion.h1>
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex w-full justify-start gap-2 text-sm"
+              transition={{
+                delay: 0.6,
+                duration: 0.6,
+              }}
+              className="flex w-full justify-start gap-2 text-sm sm:text-lg"
             >
               <div className="">I'm a</div>
               <RotatingText
                 texts={["Back-End", "Front-End", "Full-Stack"]}
-                mainClassName="bg-background min-w-20 font-bold text-primary justify-center rounded"
+                mainClassName="bg-card min-w-20 sm:min-w-26  font-bold text-indigo-800 justify-center rounded"
                 staggerFrom={"last"}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
@@ -65,7 +61,7 @@ const Hero = () => {
                 staggerDuration={0.025}
                 rotationInterval={2000}
                 loop={false}
-                splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1"
                 transition={{
                   type: "spring",
                   damping: 30,
@@ -77,20 +73,20 @@ const Hero = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="z-1 flex w-full items-center justify-center gap-2 text-sm">
-        <div className="flex h-fit w-full flex-wrap justify-center gap-2 rounded-xl py-3 backdrop-blur-[1px]">
-          <CustomInfoTag className="w-[55%]">
-            <Mic className="h-5 w-auto" />
-            Thai & English
-          </CustomInfoTag>
-          <CustomInfoTag className="w-[35%]">
-            <MapPinHouse className="h-5 w-auto" />
-            Thailand
-          </CustomInfoTag>
-          <CustomInfoTag className="w-[35%]">
-            <Cake className="h-5 w-auto" />
-            {dayjs().diff(dayjs("1998-03-28"), "year")} y/o
-          </CustomInfoTag>
+      <CardContent className="z-1 mx-2 my-2 flex h-5 w-full items-center justify-center gap-2 text-xs font-semibold sm:h-10 sm:gap-4 sm:text-base md:gap-8 md:text-lg">
+        <div className="flex items-center gap-1">
+          <Cake className="h-4 w-auto" />
+          {dayjs().diff(dayjs("1998-03-28"), "year")} y/o
+        </div>
+        <Separator orientation="vertical" />
+        <div className="flex items-center gap-1">
+          <Mic className="h-4 w-auto" />
+          Thai & English
+        </div>
+        <Separator orientation="vertical" />
+        <div className="flex items-center gap-1">
+          <MapPinHouse className="h-4 w-auto" />
+          Bangkok, Thailand
         </div>
       </CardContent>
     </Card>

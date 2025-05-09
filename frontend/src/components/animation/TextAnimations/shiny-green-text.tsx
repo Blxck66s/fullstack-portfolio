@@ -34,8 +34,8 @@ const ShinyGreenText: React.FC<ShinyGreenTextProps> = ({
     >
       <motion.span
         animate={{
-          color: ["#72cfa0", "#b5b5b5a4"],
-          textShadow: ["0 0 2px #72cfa0", "0 0 0px #b5b5b5a4"],
+          color: ["#2ECC71", "#b5b5b5a4"],
+          textShadow: ["0 0 2px #2ECC71", "0 0 0px #b5b5b5a4"],
           transition: {
             duration: 2,
             repeat: Infinity,
