@@ -4,6 +4,7 @@ import { Cake, MapPinHouse, Mic } from "lucide-react";
 import { motion } from "motion/react";
 import Particles from "./animation/Backgrounds/particles";
 import RotatingText from "./animation/TextAnimations/rotating-text";
+import Links from "./Links";
 import OpenToWork from "./OpenToWork";
 import { useTheme } from "./theme-provider";
 import { Card, CardContent, CardHeader } from "./ui/card";
@@ -16,8 +17,9 @@ const Hero = () => {
 
   return (
     <Card className="bg-background relative h-full w-full">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2 min-[420px]:flex-row">
         <OpenToWork />
+        {/* <ModeToggle /> */}
       </div>
       <div className="absolute inset-0 z-0">
         <Particles className="h-full w-full" particleColors={particleColors} />
@@ -32,7 +34,7 @@ const Hero = () => {
           className="aspect-square h-auto w-[70%] rounded-xl object-cover shadow-lg min-[420px]:w-1/3"
         />
         <div className="flex w-full items-center justify-center">
-          <div className="xs:items-center flex w-fit flex-col gap-3">
+          <div className="flex w-fit flex-col gap-3">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -70,6 +72,7 @@ const Hero = () => {
               />
               <div className="">Developer</div>
             </motion.div>
+            <Links />
           </div>
         </div>
       </CardHeader>

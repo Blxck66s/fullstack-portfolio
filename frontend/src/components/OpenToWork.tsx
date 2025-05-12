@@ -9,7 +9,7 @@ function OpenToWork() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 420) setShowText(true);
+      if (window.innerWidth > 550) setShowText(true);
       else setShowText(false);
     };
 
@@ -20,7 +20,7 @@ function OpenToWork() {
   }, []);
 
   const handleClick = () => {
-    if (window.innerWidth <= 420) {
+    if (window.innerWidth <= 550) {
       setShowText(true);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
@@ -32,7 +32,7 @@ function OpenToWork() {
   return (
     <HoverBorderGradient
       onClick={handleClick}
-      className="flex items-center max-[420px]:px-1"
+      className="flex items-center max-[550px]:px-1"
     >
       <WaveEmoji />
       <motion.span
