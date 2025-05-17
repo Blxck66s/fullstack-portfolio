@@ -107,6 +107,7 @@ const educationData = [
       <img
         src={sripatumLogo}
         alt="sripatum-logo"
+        loading="lazy"
         className="h-10 w-10 rounded-full bg-white p-0.5"
       />
     ),
@@ -126,6 +127,7 @@ const educationData = [
       <img
         src={codecampLogo}
         alt="codecamp-logo"
+        loading="lazy"
         className="h-10 w-10 rounded-full bg-white p-0.5"
       />
     ),

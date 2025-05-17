@@ -1,3 +1,3 @@
 export default function Component() {
-  return <div>Hello, world!</div>;
+  return <div className="mt-20 text-center">404, Page Not Found</div>;
 }
