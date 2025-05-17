@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "serve -s dist",
+    "start": "react-router-serve ./build/server/index.js",
     "dev": "react-router dev",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && react-router build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -55,7 +55,6 @@
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "serve": "^14.2.4",
     "tailwindcss": "^4.1.4",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
