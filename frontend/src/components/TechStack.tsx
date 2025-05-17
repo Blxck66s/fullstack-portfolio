@@ -82,7 +82,7 @@ const tsData: tsDataType = {
 
 function TechStack() {
   return (
-    <div className="w-full max-w-3xl rounded-lg border p-5 shadow-md max-[420px]:p-1">
+    <div className="w-full max-w-3xl min-w-xs rounded-lg border p-5 shadow-md max-[420px]:p-1">
       <span className="flex items-center justify-center gap-2 p-2 text-3xl font-bold">
         <Layers />
         <h3>My Tech Stack</h3>

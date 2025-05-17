@@ -156,7 +156,10 @@ const educationData = [
 
 function TimelineTabs() {
   return (
-    <Tabs defaultValue="work" className="w-full rounded-lg">
+    <Tabs
+      defaultValue="work"
+      className="h-full w-full max-w-3xl min-w-xs rounded-lg"
+    >
       <TabsList className="w-full">
         <TabsTrigger value="work">Work</TabsTrigger>
         <TabsTrigger value="education">Education</TabsTrigger>
