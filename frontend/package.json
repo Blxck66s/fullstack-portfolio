@@ -18,6 +18,7 @@
     "@radix-ui/react-tabs": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.6",
     "@react-router/node": "^7.5.3",
+    "@react-router/serve": "^7.6.0",
     "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
