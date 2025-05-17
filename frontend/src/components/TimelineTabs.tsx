@@ -158,7 +158,7 @@ function TimelineTabs() {
   return (
     <Tabs
       defaultValue="work"
-      className="h-full w-full max-w-3xl min-w-xs rounded-lg"
+      className="h-full w-full max-w-2xl min-w-xs rounded-lg lg:order-3"
     >
       <TabsList className="w-full">
         <TabsTrigger value="work">Work</TabsTrigger>

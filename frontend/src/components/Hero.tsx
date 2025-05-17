@@ -16,7 +16,7 @@ const Hero = () => {
     theme === "dark" ? ["#FFFFFF", "#FFFFFF"] : ["#000000", "#000000"];
 
   return (
-    <Card className="bg-background relative h-full w-full max-w-3xl min-w-xs">
+    <Card className="bg-background relative h-full w-full max-w-2xl min-w-xs">
       <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2 min-[420px]:flex-row">
         <OpenToWork />
         {/* <ModeToggle /> */}
