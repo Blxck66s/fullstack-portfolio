@@ -2,6 +2,7 @@ import { reverseKebabCase } from "@/lib/utils";
 import { Layers } from "lucide-react";
 import { motion } from "motion/react";
 import TechStackBadge from "./TechStackBadge";
+import { GlowingEffect } from "./ui/glowing-effect";
 
 type tsItems = {
   name: string;
@@ -103,8 +104,16 @@ function TechStack() {
                   delay: index * 0.2,
                   ease: "easeOut",
                 }}
-                className="bg-card rounded-lg p-2"
+                className="bg-card/30 relative rounded-lg border p-2"
               >
+                <GlowingEffect
+                  spread={40}
+                  glow={true}
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.01}
+                  borderWidth={2}
+                />
                 <h4 className="p-2 text-2xl font-semibold sm:text-xl">
                   {reverseKebabCase(category)}
                 </h4>
