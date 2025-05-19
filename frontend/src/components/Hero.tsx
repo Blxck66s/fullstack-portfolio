@@ -1,14 +1,15 @@
-import profilePicture from "@/assets/profile-picture.png";
 import dayjs from "dayjs";
 import { Cake, MapPinHouse, Mic } from "lucide-react";
 import { motion } from "motion/react";
-import Particles from "./animation/Backgrounds/particles";
+import { Suspense, lazy } from "react";
 import RotatingText from "./animation/TextAnimations/rotating-text";
 import Links from "./Links";
 import OpenToWork from "./OpenToWork";
 import { useTheme } from "./theme-provider";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Separator } from "./ui/separator";
+
+const Particles = lazy(() => import("./animation/Backgrounds/particles"));
 
 const Hero = () => {
   const { theme } = useTheme();
@@ -22,15 +23,21 @@ const Hero = () => {
         {/* <ModeToggle /> */}
       </div>
       <div className="absolute inset-0 z-0">
-        <Particles className="h-full w-full" particleColors={particleColors} />
+        <Suspense fallback={null}>
+          <Particles
+            className="h-full w-full"
+            particleColors={particleColors}
+          />
+        </Suspense>
       </div>
       <CardHeader className="z-1 flex flex-col items-center justify-start gap-5 min-[420px]:flex-row">
         <motion.img
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
-          src={profilePicture}
+          src="/profile-picture.png"
           alt="Ken's Avatar"
+          loading="lazy"
           className="aspect-square h-auto w-[70%] rounded-xl object-cover shadow-lg min-[420px]:w-1/3"
         />
         <div className="flex w-full items-center justify-center">
@@ -76,17 +83,17 @@ const Hero = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="z-1 mx-2 my-2 flex h-5 w-full items-center justify-center gap-2 text-xs font-semibold sm:h-10 sm:gap-4 sm:text-base md:gap-8 md:text-lg">
+      <CardContent className="z-1 mx-2 my-2 mb-5 flex h-5 items-center justify-center gap-2 text-xs font-semibold max-sm:flex-wrap sm:h-10 sm:gap-4 sm:text-base md:gap-8 md:text-lg">
         <div className="flex items-center gap-1">
           <Cake className="h-4 w-auto" />
           {dayjs().diff(dayjs("1998-03-28"), "year")} y/o
         </div>
-        <Separator orientation="vertical" />
+        <Separator orientation="vertical" className="max-[420px]:hidden" />
         <div className="flex items-center gap-1">
           <Mic className="h-4 w-auto" />
           Thai & English
         </div>
-        <Separator orientation="vertical" />
+        <Separator orientation="vertical" className="max-[420px]:hidden" />
         <div className="flex items-center gap-1">
           <MapPinHouse className="h-4 w-auto" />
           Bangkok, Thailand

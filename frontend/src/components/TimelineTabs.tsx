@@ -1,31 +1,9 @@
-import amirisLogo from "@/assets/amiris.gif";
-import codecampLogo from "@/assets/codecamp.jpg";
 import GramickHouseSVG from "@/assets/gramick-house.svg?react";
-import sripatumLogo from "@/assets/sripatum-university.jpg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "./ui/badge";
+import { amirisBadgesData, ghBadgesData } from "@/data/timeline";
+import TechStackBadge from "./TechStackBadge";
 import { Timeline } from "./ui/timeline";
 
-const ghBadges = [
-  "TypeScript",
-  "NestJS",
-  "Express.js",
-  "React",
-  "Prisma",
-  "Sequelize",
-  "Mongoose",
-  "PostgreSQL",
-  "MongoDB",
-];
-const amirisBadges = [
-  "TypeScript",
-  "Vite",
-  "React",
-  "Tailwind CSS",
-  "NestJS",
-  "Prisma",
-  "MySQL",
-];
 const workData = [
   {
     logo: <GramickHouseSVG className="h-10 w-10" viewBox="0 0 50 50" />,
@@ -59,11 +37,7 @@ const workData = [
 
         <p className="mt-2 mb-1 font-medium">Technologies:</p>
         <div className="flex flex-wrap gap-1">
-          {ghBadges.map((badge) => (
-            <Badge key={badge} variant="secondary">
-              {badge}
-            </Badge>
-          ))}
+          <TechStackBadge items={ghBadgesData} />
         </div>
       </div>
     ),
@@ -71,7 +45,7 @@ const workData = [
   {
     logo: (
       <img
-        src={amirisLogo}
+        src="/amiris.gif"
         alt="amiris-logo"
         className="h-10 w-10 rounded-full bg-white p-0.5"
       />
@@ -91,11 +65,7 @@ const workData = [
         </ul>
         <p className="mt-2 mb-1 font-medium">Technologies:</p>
         <div className="flex flex-wrap gap-1">
-          {amirisBadges.map((badge) => (
-            <Badge key={badge} variant="secondary">
-              {badge}
-            </Badge>
-          ))}
+          <TechStackBadge items={amirisBadgesData} />
         </div>
       </div>
     ),
@@ -105,7 +75,7 @@ const educationData = [
   {
     logo: (
       <img
-        src={sripatumLogo}
+        src="/sripatum-university.jpg"
         alt="sripatum-logo"
         loading="lazy"
         className="h-10 w-10 rounded-full bg-white p-0.5"
@@ -125,7 +95,7 @@ const educationData = [
   {
     logo: (
       <img
-        src={codecampLogo}
+        src="/codecamp.jpg"
         alt="codecamp-logo"
         loading="lazy"
         className="h-10 w-10 rounded-full bg-white p-0.5"

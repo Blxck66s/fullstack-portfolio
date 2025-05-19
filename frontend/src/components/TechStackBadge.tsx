@@ -1,23 +1,9 @@
+import { TechStackItem } from "@/data/tech-stack";
 import { motion } from "motion/react";
 import { Badge } from "./ui/badge";
 
-const iconModules = import.meta.glob(
-  "../assets/tech-stack/*.{png,jpg,webp,jpeg}",
-  { eager: true },
-) as Record<string, { default: string }>;
-
-const iconMap = Object.fromEntries(
-  Object.entries(iconModules).map(([path, m]) => {
-    const name = path.split("/").pop()!;
-    return [name, m.default];
-  }),
-);
-
-function TechStackBadge({
-  items,
-}: {
-  items: { name: string; icon: string | null }[];
-}) {
+function TechStackBadge({ items }: { items: TechStackItem[] | undefined }) {
+  if (!items) return null;
   return (
     <>
       {items.map((item, index) => {
@@ -39,7 +25,7 @@ function TechStackBadge({
             >
               {item.icon && (
                 <img
-                  src={iconMap[item.icon]}
+                  src={`/tech-stack/${item.icon}`}
                   alt={item.name}
                   loading="lazy"
                   className="h-5 w-5 rounded bg-transparent object-contain"

@@ -20,10 +20,10 @@ function Links() {
         </a>
       </Button>
       <div className="flex w-full items-center justify-start gap-3">
-        <LinkButton href="https://www.linkedin.com">
+        <LinkButton href="https://www.linkedin.com/in/thanandorneamtakoo">
           <LinkedinSvg className="h-6 w-auto rounded-full sm:h-8" />
         </LinkButton>
-        <LinkButton href="https://github.com">
+        <LinkButton href="https://github.com/Blxck66s">
           <GithubSvg className="fill-primary h-6 w-auto sm:h-8" />
         </LinkButton>
         <LinkButton href="mailto:crowz.gac@gmail.com">
