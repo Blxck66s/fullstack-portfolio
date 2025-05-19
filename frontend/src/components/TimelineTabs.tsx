@@ -37,7 +37,7 @@ const workData = [
 
         <p className="mt-2 mb-1 font-medium">Technologies:</p>
         <div className="flex flex-wrap gap-1">
-          <TechStackBadge items={ghBadgesData} />
+          <TechStackBadge items={ghBadgesData} small />
         </div>
       </div>
     ),
@@ -65,7 +65,7 @@ const workData = [
         </ul>
         <p className="mt-2 mb-1 font-medium">Technologies:</p>
         <div className="flex flex-wrap gap-1">
-          <TechStackBadge items={amirisBadgesData} />
+          <TechStackBadge items={amirisBadgesData} small />
         </div>
       </div>
     ),
