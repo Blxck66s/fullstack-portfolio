@@ -39,10 +39,10 @@ function OpenToWork() {
         animate={{
           width: showText ? "auto" : "0px",
           overflow: "hidden",
-        }}
-        transition={{
-          duration: 0.3,
-          ease: "easeInOut",
+          transition: {
+            duration: 0.3,
+            ease: "easeInOut",
+          },
         }}
         style={{
           overflow: "hidden",

@@ -1,19 +1,54 @@
 import { motion } from "framer-motion";
+import { JSX } from "react";
 
-function LinkButton({
-  children,
-  href,
-}: React.PropsWithChildren<{ href: string }>) {
+function LinkButtons({
+  data,
+}: {
+  data: { name: string; icon: JSX.Element; href: string }[];
+}) {
+  const startDelay = 0.8;
   return (
-    <motion.a
-      href={href}
-      transition={{ duration: 0.2 }}
-      whileHover={{ scale: 1.4 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      {children}
-    </motion.a>
+    <>
+      {data.map((link, index) => (
+        <motion.a
+          key={link.name}
+          initial={{
+            opacity: 0,
+            x: index === 0 ? 0 : -20,
+            y: index === 0 ? 10 : 0,
+          }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            y: 0,
+            transition: { duration: 0.4, delay: startDelay + index * 0.2 },
+          }}
+          href={link.href}
+          whileTap={{
+            scale: 0.8,
+            transition: {
+              duration: 0.2,
+              delay: 0,
+              type: "spring",
+              stiffness: 400,
+              damping: 15,
+            },
+          }}
+          whileHover={{
+            scale: 1.4,
+            transition: {
+              duration: 0.3,
+              delay: 0,
+              type: "tween",
+              ease: "easeOut",
+            },
+          }}
+        >
+          {link.icon}
+        </motion.a>
+      ))}
+    </>
   );
 }
 
-export default LinkButton;
+export default LinkButtons;

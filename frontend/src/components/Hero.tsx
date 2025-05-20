@@ -24,10 +24,7 @@ const Hero = () => {
       </div>
       <div className="absolute inset-0 z-0">
         <Suspense fallback={null}>
-          <Particles
-            className="h-full w-full"
-            particleColors={particleColors}
-          />
+          <Particles particleColors={particleColors} />
         </Suspense>
       </div>
       <CardHeader className="z-1 flex flex-col items-center justify-start gap-5 min-[420px]:flex-row">
@@ -54,7 +51,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.6,
+                delay: 0.4,
                 duration: 0.6,
               }}
               className="flex w-full justify-start gap-2 text-sm sm:text-lg"
