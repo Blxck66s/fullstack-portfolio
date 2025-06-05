@@ -15,7 +15,6 @@ function Home() {
         </Suspense>
         <TimelineTabs />
       </div>
-
       <div className="flex w-full flex-col gap-4 lg:max-w-2xl">
         <TechStack />
         <ProjectShowcase />

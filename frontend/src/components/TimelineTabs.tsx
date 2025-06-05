@@ -117,7 +117,7 @@ const educationData = [
             Personal e-commerce web development project using React.js, Tailwind
             CSS, Git, MySQL, and Node.js.
           </li>
-          <li>Learned MERN stack, TypeScript, and more</li>
+          <li>Learned MERN stack, JavaScript, and more</li>
         </ul>
       </div>
     ),
