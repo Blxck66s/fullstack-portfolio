@@ -1,4 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { AccessTokenAutoRefresh } from "./components/realtime-chat/actoken-autorefresh";
 import { ThemeProvider } from "./components/theme-provider";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider defaultTheme="system" storageKey="portfolio-theme">
+          <AccessTokenAutoRefresh />
           {children}
         </ThemeProvider>
         <ScrollRestoration />

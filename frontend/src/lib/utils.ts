@@ -14,3 +14,20 @@ export function reverseKebabCase(str: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+export function validatePassword(password: string) {
+  const rules = [
+    { regex: /.{8,64}/, message: "8-64 characters" },
+    {
+      regex: /^[a-zA-Z0-9!@#$%^&*]+$/,
+      message: "Only a-z, A-Z, 0-9, !@#$%^&*",
+    },
+    { regex: /^(?=.*[A-Z])/, message: "At least one uppercase letter" },
+    { regex: /^(?=.*[a-z])/, message: "At least one lowercase letter" },
+    { regex: /^(?=.*[0-9])/, message: "At least one number" },
+    { regex: /^(?=.*[!@#$%^&*])/, message: "At least one special character" },
+  ];
+  return rules
+    .filter((rule) => !rule.regex.test(password))
+    .map((r) => r.message);
+}

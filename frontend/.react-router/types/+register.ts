@@ -12,5 +12,7 @@ declare module "react-router" {
 
 type Params = {
   "/": {};
+  "/realtime-chat": {};
+  "/realtime-chat/auth": {};
   "/*?": {};
 };
