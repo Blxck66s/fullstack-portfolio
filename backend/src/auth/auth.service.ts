@@ -79,7 +79,7 @@ export class AuthService {
     response.cookie('access_token', access_token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: +(process.env.ACCESS_TOKEN_AGE || 15 * 60 * 1000), // 15 minutes
     });
     await this.refreshTokenService.create(user.id, response);
@@ -170,7 +170,7 @@ export class AuthService {
     response.cookie('access_token', access_token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: +(process.env.ACCESS_TOKEN_AGE || 15 * 60 * 1000), // 15 minutes
     });
     await this.refreshTokenService.rotate(token, response);

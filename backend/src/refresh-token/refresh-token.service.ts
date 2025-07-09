@@ -45,7 +45,7 @@ export class RefreshTokenService {
     response.cookie('refresh_token', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       path: '/auth',
       maxAge: +(process.env.REFRESH_TOKEN_AGE || 7 * 24 * 60 * 60 * 1000), // 7 days
     });
