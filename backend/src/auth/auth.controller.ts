@@ -17,6 +17,10 @@ import { JwtGuard } from './guard/jwt.guard';
 import { Response } from 'express';
 import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 import { LocalRegisterDto } from './dto';
+import {
+  cookieAccessTokenOptionsDelete,
+  cookieRefreshTokenOptionsDelete,
+} from 'src/common/constants';
 
 @Controller('auth')
 export class AuthController {
@@ -42,8 +46,8 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const token = req.cookies?.refresh_token || null;
-    response.clearCookie('access_token');
-    response.clearCookie('refresh_token', { path: '/auth' });
+    response.clearCookie('access_token', cookieAccessTokenOptionsDelete);
+    response.clearCookie('refresh_token', cookieRefreshTokenOptionsDelete);
     if (token) {
       const validToken = await this.refreshTokenService.validate(token);
       if (validToken) await this.refreshTokenService.revoke(validToken);
@@ -60,8 +64,8 @@ export class AuthController {
   ) {
     const token = req.cookies?.refresh_token || null;
     if (!token) {
-      response.clearCookie('refresh_token', { path: '/auth' });
-      response.clearCookie('access_token');
+      response.clearCookie('access_token', cookieAccessTokenOptionsDelete);
+      response.clearCookie('refresh_token', cookieRefreshTokenOptionsDelete);
       throw new UnauthorizedException('No refresh token provided');
     }
     try {
@@ -73,8 +77,8 @@ export class AuthController {
       response.status(200).json({ message: 'Token refreshed successfully' });
     } catch (error) {
       console.error('Token refresh error:', error);
-      response.clearCookie('access_token');
-      response.clearCookie('refresh_token', { path: '/auth' });
+      response.clearCookie('access_token', cookieAccessTokenOptionsDelete);
+      response.clearCookie('refresh_token', cookieRefreshTokenOptionsDelete);
       throw new UnauthorizedException('Failed to refresh token');
     }
   }

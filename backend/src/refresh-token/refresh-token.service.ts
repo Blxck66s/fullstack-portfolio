@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import type { Algorithm } from 'jsonwebtoken';
 import { RefreshToken } from '@prisma/client';
+import { cookieRefreshTokenOptionsCreate } from 'src/common/constants';
 
 @Injectable()
 export class RefreshTokenService {
@@ -18,7 +19,10 @@ export class RefreshTokenService {
   async create(userId: string, response: Response): Promise<string> {
     const tokenId = uuidv4();
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
+    expiresAt.setMilliseconds(
+      expiresAt.getMilliseconds() +
+        (Number(process.env.REFRESH_TOKEN_AGE) || 7 * 24 * 60 * 60 * 1000),
+    ); // 7 days
     const token = await this.jwtService.signAsync(
       {
         sub: userId,
@@ -42,13 +46,7 @@ export class RefreshTokenService {
       },
     });
 
-    response.cookie('refresh_token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      path: '/auth',
-      maxAge: +(process.env.REFRESH_TOKEN_AGE || 7 * 24 * 60 * 60 * 1000), // 7 days
-    });
+    response.cookie('refresh_token', token, cookieRefreshTokenOptionsCreate);
 
     return token;
   }

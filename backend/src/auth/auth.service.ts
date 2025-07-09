@@ -16,6 +16,7 @@ import { Response } from 'express';
 import { Prisma, RefreshToken } from '@prisma/client';
 import { UserWithProviders } from './auth.decorator';
 import { v4 as uuidv4 } from 'uuid';
+import { cookieAccessTokenOptionsCreate } from 'src/common/constants';
 
 @Injectable()
 export class AuthService {
@@ -76,12 +77,11 @@ export class AuthService {
       },
     );
 
-    response.cookie('access_token', access_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: +(process.env.ACCESS_TOKEN_AGE || 15 * 60 * 1000), // 15 minutes
-    });
+    response.cookie(
+      'access_token',
+      access_token,
+      cookieAccessTokenOptionsCreate,
+    );
     await this.refreshTokenService.create(user.id, response);
   }
 
@@ -167,12 +167,11 @@ export class AuthService {
       },
     );
 
-    response.cookie('access_token', access_token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: +(process.env.ACCESS_TOKEN_AGE || 15 * 60 * 1000), // 15 minutes
-    });
+    response.cookie(
+      'access_token',
+      access_token,
+      cookieAccessTokenOptionsCreate,
+    );
     await this.refreshTokenService.rotate(token, response);
   }
 }
