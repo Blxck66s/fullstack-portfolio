@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-router-serve ./build/server/index.js",
     "dev": "react-router dev",
-    "build": "tsc -b && react-router build",
+    "build": "tsc -b && react-router build --output public",
     "lint": "eslint .",
     "preview": "vite preview"
   },
