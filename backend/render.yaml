@@ -1,0 +1,5 @@
+services:
+  - type: web
+    name: fullstack-portfolio-nestjs
+    runtime: node
+    rootDir: backend
