@@ -3,6 +3,7 @@ import GmailSvg from "@/assets/gmail.svg?react";
 import LinkedinSvg from "@/assets/linkedin.svg?react";
 import { FileDown } from "lucide-react";
 import { motion } from "motion/react";
+import { Link } from "react-router";
 import { Button } from "./ui/button";
 import LinkButtons from "./ui/link-button";
 
@@ -37,14 +38,14 @@ function Links() {
       >
         <Button className="h-6 w-fit gap-1 hover:cursor-pointer sm:h-8">
           <FileDown className="h-auto w-auto" />
-          <a
-            href="/Ken_Resume.pdf"
+          <Link
+            to="/thanandorn_eamtako_resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs"
           >
             Resume
-          </a>
+          </Link>
         </Button>
       </motion.div>
       <div className="flex w-full items-center justify-start gap-3">
