@@ -1,25 +1,29 @@
-import { useChatStore } from "@/store/chat.store";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Input } from "../ui/input";
+import { Button } from "../../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../ui/dialog";
+import { Input } from "../../ui/input";
 
-interface CreateRoomModalProps {
+interface JoinRoomModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export default function CreateRoomModal({
+export default function JoinRoomModal({
   open,
   onOpenChange,
-}: CreateRoomModalProps) {
+}: JoinRoomModalProps) {
   const [roomName, setRoomName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { createRoom } = useChatStore();
+  // const { joinRoom } = useChatStore();
 
-  const handleCreate = async () => {
+  const handleJoin = async () => {
     if (!roomName.trim()) {
       setError("Room name is required");
       return;
@@ -27,12 +31,12 @@ export default function CreateRoomModal({
     setIsLoading(true);
     setError(null);
     try {
-      await createRoom(roomName.trim());
+      // await joinRoom(roomName.trim());
       setRoomName("");
       onOpenChange(false);
     } catch (err) {
-      console.error("Failed to create room", err);
-      setError("Failed to create room");
+      console.error("Failed to join room", err);
+      setError("Failed to join room");
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +46,7 @@ export default function CreateRoomModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Room</DialogTitle>
+          <DialogTitle>Join Room</DialogTitle>
           <DialogDescription className="sr-only" />
         </DialogHeader>
         <Input
@@ -52,8 +56,8 @@ export default function CreateRoomModal({
           disabled={isLoading}
         />
         {error && <div className="text-xs text-red-500">{error}</div>}
-        <Button onClick={handleCreate} disabled={isLoading || !roomName.trim()}>
-          {isLoading ? "Creating..." : "Create"}
+        <Button onClick={handleJoin} disabled={isLoading || !roomName.trim()}>
+          {isLoading ? "Joining..." : "Join"}
         </Button>
       </DialogContent>
     </Dialog>

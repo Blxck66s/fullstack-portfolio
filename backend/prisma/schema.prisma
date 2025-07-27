@@ -57,11 +57,20 @@ model ChatRoom {
   messages    ChatMessage[]
 }
 
+enum ChatMemberStatus {
+  ACTIVE
+  PENDING
+  BLOCKED
+}
+
 model ChatMember {
   id          String   @id @default(cuid())
   userId      String
   chatRoomId  String
+  status      ChatMemberStatus @default(ACTIVE)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
   
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   chatRoom    ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)

@@ -1,61 +1,116 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAuthStore } from "@/store/auth.store";
 import { useChatStore } from "@/store/chat.store";
+import { ChatUser } from "@/types/chat";
+import clsx from "clsx";
 import dayjs from "dayjs";
-import { Circle, Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router";
+import UserAvatar from "./user-avatar";
 
 export function HydrateFallback() {
   return (
-    <ScrollArea className="h-full w-full flex-1 px-6 py-4">
-      <div className="flex h-20 items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    </ScrollArea>
+    <div className="flex h-full items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+    </div>
   );
 }
 
 function ChatRoomMessage() {
-  const { selectedRoom, isFetchingMessages } = useChatStore();
-  useEffect(() => {
-    const rooms = useChatStore.getState().rooms;
-    if (!rooms.length) useChatStore.getState().getRooms();
-  }, []);
+  const { selectedRoom, isFetchingRooms, setMessagesPagination, getMessages } =
+    useChatStore();
 
-  if (isFetchingMessages) return <HydrateFallback />;
+  const [isHasMore, setIsHasMore] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!selectedRoom) return;
+    setIsHasMore(
+      selectedRoom.messages.length < selectedRoom.messagesPagination.totalCount,
+    );
+  }, [selectedRoom, selectedRoom?.messagesPagination]);
+
+  useEffect(() => {
+    if (selectedRoom?.id && selectedRoom?.messages.length === 0) getMessages();
+  }, [selectedRoom?.id, getMessages, selectedRoom?.messages.length]);
+
+  const fetchMoreMessages = async () => {
+    if (!selectedRoom) return;
+    await setMessagesPagination({
+      page: selectedRoom?.messagesPagination.page + 1,
+    });
+  };
+
+  if (isFetchingRooms && !selectedRoom) return <HydrateFallback />;
+
+  if (!selectedRoom) {
+    return (
+      <div className="h-full w-full gap-4">
+        <div className="flex h-full flex-col justify-center text-center text-gray-500">
+          <p>Select a chat room to see messages</p>
+          <p className="text-sm">
+            <Link
+              to="?joinOrCreate=true"
+              className="text-blue-500 hover:underline"
+            >
+              Join
+            </Link>{" "}
+            or{" "}
+            <Link
+              to="?joinOrCreate=true"
+              className="text-blue-500 hover:underline"
+            >
+              Create
+            </Link>{" "}
+            a room to start chatting!
+          </p>
+        </div>
+      </div>
+    );
+  }
+  const { messages = [], members = [] } = selectedRoom;
 
   return (
-    <ScrollArea className="flex-1 px-6 py-4">
-      <div className="flex flex-col gap-4">
-        {!selectedRoom && (
-          <div className="text-center text-gray-500">
-            <p>Select a chat room to see messages</p>
-            <p className="text-sm">
-              <Link
-                to="?joinOrCreate=true"
-                className="text-blue-500 hover:underline"
-              >
-                Join
-              </Link>{" "}
-              or{" "}
-              <Link
-                to="?joinOrCreate=true"
-                className="text-blue-500 hover:underline"
-              >
-                Create
-              </Link>{" "}
-              a room to start chatting!
-            </p>
+    <div className="h-full w-full">
+      <InfiniteScroll
+        dataLength={messages.length}
+        next={fetchMoreMessages}
+        hasMore={isHasMore}
+        loader={
+          <div className="flex h-full w-full items-center justify-center p-4">
+            <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
           </div>
-        )}
-        {selectedRoom && selectedRoom.messages.length === 0 && (
-          <div className="text-center text-gray-500">
-            <p>No messages yet. Start the conversation!</p>
-          </div>
-        )}
-        {selectedRoom &&
-          selectedRoom.messages.map((message) => (
+        }
+        scrollableTarget="scrollableDiv"
+        height={400}
+        className="flex flex-col-reverse gap-2 scroll-smooth p-4"
+        inverse
+        endMessage={
+          <p className="text-center text-gray-500">
+            {messages.length !== 0
+              ? "No more messages"
+              : "No messages yet. Start the conversation!"}
+          </p>
+        }
+      >
+        {messages.map((message, MessageIndex) => {
+          const currentMember = members.find(
+            (member) => member.id === message.chatMemberId,
+          ) || {
+            user: {
+              id: "deleted-user",
+              name: "Deleted User",
+              avatarUrl: "/placeholder.svg?height=32&width=32",
+              isOnline: false,
+            },
+          };
+
+          const prevMessage = messages[MessageIndex - 1];
+
+          message.isOwn =
+            currentMember.user.id === useAuthStore.getState().user?.id;
+
+          return (
             <div
               key={message.id}
               className={`flex p-1 ${message.isOwn ? "justify-end" : "justify-start"}`}
@@ -65,53 +120,48 @@ function ChatRoomMessage() {
                   message.isOwn ? "flex-row-reverse" : ""
                 }`}
               >
-                <div className="relative">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={
-                        message.chatMember.user.avatarUrl ||
-                        "/placeholder.svg?height=32&width=32"
-                      }
-                    />
-                    <AvatarFallback className="text-xs">
-                      {message.chatMember.user.name
-                        .split(" ")
-                        .map((n: string) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Circle
-                    className={`absolute -right-1 -bottom-1 h-3 w-3 ${
-                      message.chatMember.user.isOnline
-                        ? "fill-green-500 text-green-500"
-                        : "fill-gray-400 text-gray-400"
-                    }`}
+                <div className="min-h-10 min-w-10">
+                  <UserAvatar
+                    user={currentMember.user as ChatUser}
+                    size="md"
+                    className={clsx("", {
+                      hidden:
+                        prevMessage?.chatMemberId === message.chatMemberId,
+                    })}
                   />
                 </div>
                 <div
-                  className={`rounded-lg p-3 ${
-                    message.isOwn
-                      ? "bg-blue-500 text-white"
-                      : "border shadow-sm"
-                  }`}
+                  className={clsx("flex flex-col", {
+                    "items-end": message.isOwn,
+                    "items-start": !message.isOwn,
+                  })}
                 >
-                  {!message.isOwn && (
-                    <p className="mb-1 text-xs font-medium text-gray-600">
-                      {message.chatMember.user.name}
-                    </p>
-                  )}
-                  <p className="text-sm">{message.message}</p>
-                  <p
-                    className={`mt-1 text-xs ${message.isOwn ? "text-blue-100" : "text-gray-500"}`}
+                  <div
+                    className={`rounded-lg px-3 py-1.5 ${
+                      message.isOwn
+                        ? "bg-blue-500 text-white"
+                        : "border shadow-sm"
+                    }`}
                   >
-                    {dayjs(message.createdAt).format("HH:mm")}
+                    {!message.isOwn && (
+                      <p className="mb-1 text-xs font-medium text-gray-600">
+                        {currentMember.user.name}
+                      </p>
+                    )}
+                    <p className="text-sm">{message.message}</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {dayjs(message.createdAt).isSame(dayjs(), "day")
+                      ? dayjs(message.createdAt).format("HH:mm")
+                      : dayjs(message.createdAt).format("MMM D, HH:mm")}
                   </p>
                 </div>
               </div>
             </div>
-          ))}
-      </div>
-    </ScrollArea>
+          );
+        })}
+      </InfiniteScroll>
+    </div>
   );
 }
 

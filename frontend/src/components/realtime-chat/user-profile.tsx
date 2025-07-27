@@ -26,13 +26,13 @@ function UserProfile() {
         <div className="bg-muted rounded-lg p-6">
           <div className="flex flex-col items-center gap-4 text-center">
             <div className="bg-primary/10 flex h-20 w-20 items-center justify-center overflow-hidden rounded-full">
-              <UserAvatar user={user} />
+              <UserAvatar user={user} size="xl" />
             </div>
             <div>
               <h3 className="text-xl font-medium">{user?.name}</h3>
               <p className="text-muted-foreground">{user?.email}</p>
               <Badge className="mt-2" variant="secondary">
-                {user?.provider}
+                {user.providers.map((provider) => provider.provider).join(", ")}
               </Badge>
             </div>
 

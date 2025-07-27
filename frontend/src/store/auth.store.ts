@@ -14,6 +14,7 @@ export interface AuthState {
   decrementAccessTokenTimeLeft: () => void;
   setAuthenticated: (isAuthenticated: boolean) => void;
   setIsReadyToRegister: (isReady: boolean) => void;
+  setOnlineStatus: (isOnline: boolean) => void;
   checkAuthStatus: (isRefresh?: boolean) => Promise<void>;
   login: ({ provider, email, password }: AuthLogin) => Promise<void>;
   logout: () => Promise<void>;
@@ -70,6 +71,11 @@ export const useAuthStore = create<AuthState>()(
         }
         set({ authError });
       },
+      setOnlineStatus: (isOnline: boolean) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, isOnline } : null,
+        }));
+      },
       decrementAccessTokenTimeLeft: () =>
         set((state) => ({
           accessTokenTimeLeft:
@@ -82,7 +88,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           const user = await getProfile();
           set({
-            user: { ...user, isOnline: true },
+            user,
             isAuthenticated: !!user,
             accessTokenTimeLeft: dayjs.unix(user.exp).diff(dayjs(), "second"),
           });

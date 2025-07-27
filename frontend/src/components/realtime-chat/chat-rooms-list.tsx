@@ -1,9 +1,12 @@
 import { useChatStore } from "@/store/chat.store";
+import clsx from "clsx";
 import { Hash } from "lucide-react";
+import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Skeleton } from "../ui/skeleton";
-import ChatActionDropdown from "./chat-action-dropdown";
+import ChatActionDropdown from "./action/chat-action-dropdown";
+import ChatMemberDropdown from "./action/chat-member-dropdown";
 
 export function HydrateFallback() {
   return (
@@ -15,35 +18,61 @@ export function HydrateFallback() {
 }
 
 function ChatRoomsList() {
-  const {
-    rooms,
-    selectedRoom,
-    isFetchingRooms,
-    setRoomsPagination,
-    roomsPagination,
-  } = useChatStore();
+  const { rooms, selectedRoom, setRoomsPagination, roomsPagination } =
+    useChatStore();
 
-  if (isFetchingRooms) return <HydrateFallback />;
+  useEffect(() => {
+    const rooms = useChatStore.getState().rooms;
+    if (!rooms.length) useChatStore.getState().getRooms();
+  }, []);
+
+  const [isHasMore, setIsHasMore] = useState(
+    rooms.length < roomsPagination.totalCount,
+  );
+
+  useEffect(() => {
+    setIsHasMore(rooms.length < roomsPagination.totalCount);
+  }, [roomsPagination, rooms.length]);
+
+  const fetchMoreRooms = async () => {
+    await setRoomsPagination({
+      page: roomsPagination.page + 1,
+    });
+  };
+
   return (
-    <div className="flex h-full items-center gap-2">
-      <ScrollArea
-        className="w-48 rounded-md border whitespace-nowrap"
-        onScroll={(e) => {
-          const scrollLeft = e.currentTarget.scrollLeft;
-          const scrollWidth = e.currentTarget.scrollWidth;
-          const clientWidth = e.currentTarget.clientWidth;
+    <div className="flex h-full flex-col items-center gap-2">
+      <div className="flex w-full items-center justify-between gap-2">
+        <div
+          className={clsx(
+            "",
+            selectedRoom ? "w-[calc(75%-theme(space.1))]" : "w-full",
+          )}
+        >
+          <ChatActionDropdown />
+        </div>
+        {selectedRoom && (
+          <ChatMemberDropdown className="w-[calc(25%-theme(space.1))]" />
+        )}
+      </div>
 
-          if (scrollLeft + clientWidth >= scrollWidth - 10) {
-            if (
-              roomsPagination.page * roomsPagination.take <
-              roomsPagination.totalCount
-            ) {
-              setRoomsPagination({ page: roomsPagination.page + 1 });
-            }
-          }
+      <div
+        id="scrollableDiv"
+        className="h-max w-full scroll-smooth"
+        style={{
+          overflow: "auto",
+          flexDirection: "column-reverse",
         }}
       >
-        <div className="flex gap-2">
+        <InfiniteScroll
+          dataLength={rooms.length}
+          next={fetchMoreRooms}
+          hasMore={isHasMore}
+          loader={<Skeleton className="h-8 w-full" />}
+          scrollableTarget="scrollableDiv"
+          height={400}
+          className="flex flex-col gap-2 scroll-smooth p-2"
+        >
           {rooms.map((room) => (
             <Link
               key={room.id}
@@ -58,11 +87,11 @@ function ChatRoomsList() {
               {room.name}
             </Link>
           ))}
-        </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
-
-      <ChatActionDropdown />
+          {rooms.length < 10 && isHasMore && (
+            <div style={{ minHeight: (10 - rooms.length) * 48 }} />
+          )}
+        </InfiniteScroll>
+      </div>
     </div>
   );
 }

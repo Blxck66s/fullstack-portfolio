@@ -126,11 +126,13 @@ export class ChatService {
       }));
   }
 
-  addMemberToRoom(roomId: string, userId: string) {
-    return this.prisma.chatRoom.update({
+  async inviteMemberToRoom(roomId: string, userId: string) {
+    return await this.prisma.chatRoom.update({
       where: { id: roomId },
       data: {
-        members: { connect: { id: userId } },
+        members: {
+          create: { user: { connect: { id: userId } }, status: 'PENDING' },
+        },
       },
     });
   }
@@ -148,5 +150,37 @@ export class ChatService {
         },
       },
     });
+  }
+
+  async createMessage(roomId: string, memberId: string, message: string) {
+    return await this.prisma.chatMessage.create({
+      data: {
+        chatRoomId: roomId,
+        message,
+        chatMemberId: memberId,
+      },
+    });
+  }
+
+  async getMemberInfo(roomId: string, userId: string) {
+    return await this.prisma.chatMember.findFirst({
+      where: {
+        chatRoomId: roomId,
+        userId,
+      },
+      select: {
+        id: true,
+        userId: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  async isRoomOwner(roomId: string, userId: string) {
+    const member = await this.prisma.chatMember.findFirst({
+      where: { chatRoomId: roomId, userId },
+      orderBy: { createdAt: 'asc' },
+    });
+    return member?.userId === userId;
   }
 }

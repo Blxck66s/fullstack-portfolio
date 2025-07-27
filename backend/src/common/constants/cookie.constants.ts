@@ -1,9 +1,13 @@
 import { CookieOptions } from 'express';
 
-export const cookieRefreshTokenOptionsDelete: CookieOptions = {
+export const myCookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: true,
-  sameSite: 'none',
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+};
+
+export const cookieRefreshTokenOptionsDelete: CookieOptions = {
+  ...myCookieOptions,
   path: '/auth',
 };
 
@@ -13,9 +17,7 @@ export const cookieRefreshTokenOptionsCreate: CookieOptions = {
 };
 
 export const cookieAccessTokenOptionsDelete: CookieOptions = {
-  httpOnly: true,
-  secure: true,
-  sameSite: 'none',
+  ...myCookieOptions,
   path: '/',
 };
 

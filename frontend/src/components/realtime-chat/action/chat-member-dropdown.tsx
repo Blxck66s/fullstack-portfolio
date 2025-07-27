@@ -8,17 +8,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useChatStore } from "@/store/chat.store";
 import { Plus, Users } from "lucide-react";
-import { Button } from "../ui/button";
-import UserAvatar from "./user-avatar";
+import { Button } from "../../ui/button";
+import UserAvatar from "../user-avatar";
 
-function ChatMemberDropdown() {
+function ChatMemberDropdown({ className }: { className?: string }) {
   const { selectedRoom } = useChatStore();
 
   return (
     selectedRoom && (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className={className}>
             <Users className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/store/auth.store";
 import { RefreshCw, User } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 function DemoBtn() {
   const { login, isCheckingAuth } = useAuthStore();

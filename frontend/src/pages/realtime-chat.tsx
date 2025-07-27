@@ -1,25 +1,19 @@
-import ChatInput from "@/components/realtime-chat/chat-input";
-import ChatMemberDropdown from "@/components/realtime-chat/chat-member-dropdown";
-import ChatRoomInfo from "@/components/realtime-chat/chat-room-info";
+import ChatInput from "@/components/realtime-chat/action/chat-input";
 import ChatRoomMessage from "@/components/realtime-chat/chat-room-message";
 import ChatRoomsList from "@/components/realtime-chat/chat-rooms-list";
 import { CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { useChatStore } from "@/store/chat.store";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
 
 function RealtimeChat({ params }: { params: { roomId?: string } }) {
-  const { setSelectedRoom, rooms, getMessages } = useChatStore();
-  const navigate = useNavigate();
+  const { setSelectedRoom, rooms } = useChatStore();
 
   useEffect(() => {
     if (params.roomId && rooms.length) {
       setSelectedRoom(params.roomId);
-      getMessages(params.roomId, { page: 1, take: 10 });
-    } else if (!params.roomId && rooms.length) {
-      navigate("/realtime-chat");
     }
-  }, [params.roomId, setSelectedRoom, navigate, rooms.length, getMessages]);
+  }, [params.roomId, rooms.length, setSelectedRoom]);
 
   return (
     <>
@@ -28,16 +22,19 @@ function RealtimeChat({ params }: { params: { roomId?: string } }) {
           <h2 className="min-w-26 text-sm font-semibold md:min-w-34 md:text-lg">
             My Chat Rooms
           </h2>
-          <ChatRoomsList />
-          <div className="flex gap-2">
-            <ChatMemberDropdown />
-          </div>
         </div>
       </CardHeader>
-      <CardContent className="flex min-h-[400px] flex-col p-0">
-        <ChatRoomInfo />
-        <ChatRoomMessage />
-        <ChatInput />
+      <Separator className="" />
+      <CardContent className="flex h-max flex-col p-0">
+        <div className="flex flex-1">
+          <div className="h-full w-1/4 border-r p-2">
+            <ChatRoomsList />
+          </div>
+          <div className="flex min-h-full w-3/4 flex-col justify-between">
+            <ChatRoomMessage />
+            <ChatInput />
+          </div>
+        </div>
       </CardContent>
     </>
   );

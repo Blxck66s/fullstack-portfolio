@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/store/auth.store";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 function GoogleBtn() {
   const { login, isCheckingAuth } = useAuthStore();

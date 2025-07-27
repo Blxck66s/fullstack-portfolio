@@ -14,6 +14,8 @@ export interface ChatRoom {
 
   members: ChatMember[];
   messages: ChatMessage[];
+
+  messagesPagination: ChatPagination;
 }
 
 export interface ChatMember {
@@ -39,7 +41,6 @@ export interface ChatMessage {
   createdAt: Date;
 
   chatMember: ChatMember;
-  chatRoom: ChatRoom;
 }
 
 export interface GetChatRoomsRes {

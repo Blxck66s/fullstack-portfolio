@@ -1,6 +1,6 @@
 import SignForm from "@/forms/sign.form";
-import DemoBtn from "./demo-btn";
-import GoogleBtn from "./google-btn";
+import DemoBtn from "./auth-action/demo-btn";
+import GoogleBtn from "./auth-action/google-btn";
 
 function SignBox() {
   return (

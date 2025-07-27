@@ -9,7 +9,7 @@ import {
 import { Hash, Plus, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import CreateRoomModal from "./create-room-modal";
 
 function ChatActionDropdown() {
@@ -30,7 +30,7 @@ function ChatActionDropdown() {
         }}
       >
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="w-full">
             <Plus className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

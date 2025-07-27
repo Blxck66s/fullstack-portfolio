@@ -1,17 +1,23 @@
 import {
-  WebSocketGateway,
-  WebSocketServer,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  WebSocketGateway,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 import { ChatService } from './chat.service';
+import { UserWithProviders } from 'src/auth/auth.decorator';
+import { UseGuards } from '@nestjs/common';
+import { WebSocketGuard } from 'src/auth/guard/websocket.guard';
 
-@WebSocketGateway({ cors: { origin: process.env.FRONTEND_URL } })
+@UseGuards(WebSocketGuard)
+@WebSocketGateway({
+  cors: { origin: process.env.FRONTEND_URL },
+})
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer() server: Server;
-
-  constructor(private chatService: ChatService) {}
+  constructor(private readonly chatService: ChatService) {}
 
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
@@ -21,12 +27,53 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client disconnected: ${client.id}`);
   }
 
-  // @SubscribeMessage('sendMessage')
-  // async handleMessage(
-  //   client: Socket,
-  //   payload: { userId: string; content: string },
-  // ) {
-  //   // const message = await this.chatService.createMessage(payload);
-  //   this.server.emit('newMessage', message);
-  // }
+  @SubscribeMessage('sendMessage')
+  async handleMessage(
+    @MessageBody()
+    payload: {
+      roomId: string;
+      message: string;
+    },
+    @ConnectedSocket() client: Socket & { user: UserWithProviders },
+  ) {
+    const member = await this.chatService.getMemberInfo(
+      payload.roomId,
+      client.user.id,
+    );
+    if (!member) {
+      console.error(
+        `User ${client.user.id} is not a member of room ${payload.roomId}`,
+      );
+      return;
+    }
+    const message = await this.chatService.createMessage(
+      payload.roomId,
+      member.id,
+      payload.message,
+    );
+    client.to(payload.roomId).emit('message', {
+      memberId: member.id,
+      message: payload.message,
+      createdAt: message.createdAt,
+    });
+    return { success: true, message };
+  }
+
+  @SubscribeMessage('joinRoom')
+  async handleJoinRoom(
+    @MessageBody('roomId') roomId: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    await client.join(roomId);
+    console.log(`Client ${client.id} joined room ${roomId}`);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  async handleLeaveRoom(
+    @MessageBody('roomId') roomId: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    await client.leave(roomId);
+    console.log(`Client ${client.id} left room ${roomId}`);
+  }
 }

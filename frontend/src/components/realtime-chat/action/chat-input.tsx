@@ -1,23 +1,28 @@
 import { useChatStore } from "@/store/chat.store";
 import { Send } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
 
 function ChatInput() {
   const { selectedRoom, sendMessage } = useChatStore();
   const [newMessage, setNewMessage] = useState("");
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim()) {
-      sendMessage(newMessage);
+      try {
+        await sendMessage(newMessage);
+      } catch (error) {
+        console.log("Failed to send message:", error);
+      }
+
       setNewMessage("");
     }
   };
 
   return (
     selectedRoom && (
-      <div className="border-t p-4">
+      <div className="border-t p-2">
         <div className="flex gap-2">
           <Input
             placeholder={`Message #${selectedRoom?.name}...`}
@@ -31,7 +36,7 @@ function ChatInput() {
           <Button
             onClick={handleSendMessage}
             disabled={!newMessage.trim()}
-            size="sm"
+            className="h-9 w-9"
           >
             <Send className="h-4 w-4" />
           </Button>
