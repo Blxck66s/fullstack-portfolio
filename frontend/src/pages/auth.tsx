@@ -1,36 +1,58 @@
-import AuthCard from "@/components/realtime-chat/auth-card";
-import { useEffect, useState } from "react";
+import SignBox from "@/components/realtime-chat/sign-box";
+import UserProfile from "@/components/realtime-chat/user-profile";
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useAuthStore } from "@/store/auth.store";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 function Auth() {
+  dayjs.extend(relativeTime);
+  const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const { setAuthError } = useAuthStore();
   const [searchParams] = useSearchParams();
-  const [authError, setAuthError] = useState<{
-    error: string | null;
-    provider: string | null;
-  } | null>(null);
   const error = searchParams.get("error");
   const provider = searchParams.get("provider");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (error || provider) {
+    if (error && provider) {
       setAuthError({ error, provider });
-      navigate("", { replace: true });
+      navigate("/realtime-chat/auth");
     }
-  }, [error, provider, navigate]);
+  }, [error, provider, navigate, setAuthError, isAuthenticated]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24">
-      <div className="mb-8 w-full max-w-4xl text-center">
-        <h1 className="mb-2 text-3xl font-bold md:text-4xl">
-          Backend Authentication Portfolio
-        </h1>
-        <p className="text-muted-foreground">
-          Showcase of OAuth integration with Google and Facebook
-        </p>
-      </div>
-      <AuthCard error={authError?.error} provider={authError?.provider} />
-    </main>
+    <>
+      <CardHeader>
+        <div className="flex w-full flex-col items-center justify-between gap-4">
+          <CardTitle className="text-2xl">
+            Authentication Card Showcase
+          </CardTitle>
+          <CardDescription className="flex w-full justify-around">
+            <ul className="w-full list-disc pl-5">
+              <li>Access, Refresh tokens with Jwt strategy</li>
+              <li>Bcrypt hashing for password storage</li>
+              <li>Google OAuth2</li>
+            </ul>
+            <ul className="w-full list-disc pl-5">
+              <li>Uses httpOnly cookies for token storage</li>
+              <li>Strong password policy</li>
+              <li>Rate limiting</li>
+            </ul>
+          </CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent className="py-6">
+        {!isAuthenticated ? <SignBox /> : <UserProfile />}
+      </CardContent>
+    </>
   );
 }
 

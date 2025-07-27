@@ -13,6 +13,9 @@ declare module "react-router" {
 type Params = {
   "/": {};
   "/realtime-chat": {};
+  "/realtime-chat/:roomId": {
+    "roomId": string;
+  };
   "/realtime-chat/auth": {};
   "/*?": {};
 };

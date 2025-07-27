@@ -1,15 +1,28 @@
 import { useAuthStore } from "@/store/auth.store";
 import { RefreshCw } from "lucide-react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 
-function GoogleBtn({ isLoading }: { isLoading: boolean }) {
-  const { login } = useAuthStore();
+function GoogleBtn() {
+  const { login, isCheckingAuth } = useAuthStore();
+  const [localIsLoading, setLocalIsLoading] = useState(false);
+
+  const handleGoogleLogin = async () => {
+    setLocalIsLoading(true);
+    try {
+      await login({ provider: "google" });
+    } finally {
+      setLocalIsLoading(false);
+    }
+  };
+
+  const isLoading = isCheckingAuth || localIsLoading;
 
   return (
     <Button
       variant="outline"
       className="flex w-fit min-w-3xs cursor-pointer items-center justify-center gap-2"
-      onClick={() => login({ provider: "google" })}
+      onClick={handleGoogleLogin}
       disabled={isLoading}
     >
       {isLoading ? (

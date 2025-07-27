@@ -81,7 +81,7 @@ const educationData = [
         className="h-10 w-10 rounded-full bg-white p-0.5"
       />
     ),
-    title: "2019 - 2023",
+    title: "Aug 2019 - May 2023",
     content: (
       <div className="text-sm">
         <p className="mb-1 text-lg font-medium">Sripatum University</p>

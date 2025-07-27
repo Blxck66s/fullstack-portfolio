@@ -1,15 +1,28 @@
 import { useAuthStore } from "@/store/auth.store";
 import { RefreshCw, User } from "lucide-react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 
-function DemoBtn({ isLoading }: { isLoading: boolean }) {
-  const { login } = useAuthStore();
+function DemoBtn() {
+  const { login, isCheckingAuth } = useAuthStore();
+  const [localIsLoading, setLocalIsLoading] = useState(false);
+
+  const handleDemoLogin = async () => {
+    setLocalIsLoading(true);
+    try {
+      await login({ provider: "demo" });
+    } finally {
+      setLocalIsLoading(false);
+    }
+  };
+
+  const isLoading = isCheckingAuth || localIsLoading;
 
   return (
     <Button
       variant="outline"
       className="flex w-fit min-w-3xs cursor-pointer items-center justify-center gap-2"
-      onClick={() => login({ provider: "demo" })}
+      onClick={handleDemoLogin}
       disabled={isLoading}
     >
       {isLoading ? (

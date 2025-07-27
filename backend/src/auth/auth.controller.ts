@@ -21,11 +21,13 @@ import {
   cookieAccessTokenOptionsDelete,
   cookieRefreshTokenOptionsDelete,
 } from 'src/common/constants';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
+    private usersService: UsersService,
     private refreshTokenService: RefreshTokenService,
   ) {}
 
@@ -40,6 +42,22 @@ export class AuthController {
   }
 
   @Public()
+  @Post('demo/login')
+  async demoLogin(@Res({ passthrough: true }) response: Response) {
+    if (!process.env.DEMO_EMAIL || !process.env.DEMO_PASSWORD) {
+      throw new InternalServerErrorException(
+        'Demo credentials are not set in environment variables',
+      );
+    }
+    const user = await this.authService.validateLocalUser(
+      process.env.DEMO_EMAIL,
+      process.env.DEMO_PASSWORD,
+    );
+    if (!user) throw new InternalServerErrorException('Demo user not found');
+    await this.authService.login(user, response);
+  }
+
+  @Public()
   @Post('logout')
   async logout(
     @Request() req: { cookies: { refresh_token?: string } },
@@ -50,7 +68,13 @@ export class AuthController {
     response.clearCookie('refresh_token', cookieRefreshTokenOptionsDelete);
     if (token) {
       const validToken = await this.refreshTokenService.validate(token);
-      if (validToken) await this.refreshTokenService.revoke(validToken);
+      if (validToken) {
+        await this.refreshTokenService.revoke(validToken);
+        await this.usersService.updateUserOnlineStatus(
+          validToken.userId,
+          false,
+        );
+      }
     }
     response.status(200).json({ message: 'Logout successful' });
   }
@@ -68,11 +92,9 @@ export class AuthController {
       response.clearCookie('refresh_token', cookieRefreshTokenOptionsDelete);
       throw new UnauthorizedException('No refresh token provided');
     }
+    const refreshToken = await this.refreshTokenService.validate(token);
+    if (!refreshToken) throw new UnauthorizedException('Invalid refresh token');
     try {
-      const refreshToken = await this.refreshTokenService.validate(token);
-      if (!refreshToken)
-        throw new UnauthorizedException('Invalid refresh token');
-
       await this.authService.refreshToken(refreshToken, response);
       response.status(200).json({ message: 'Token refreshed successfully' });
     } catch (error) {
@@ -85,8 +107,9 @@ export class AuthController {
 
   @UseGuards(JwtGuard)
   @Get('profile')
-  getProfile(@Request() req: { user: UserWithProviders }) {
+  async getProfile(@Request() req: { user: UserWithProviders }) {
     const { id, email, name, avatarUrl, role, providers, exp } = req.user;
+    await this.usersService.updateUserOnlineStatus(id, true);
     return { id, email, name, avatarUrl, role, providers, exp };
   }
 

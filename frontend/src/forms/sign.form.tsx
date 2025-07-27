@@ -4,16 +4,17 @@ import { validatePassword } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth.store";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
-function SignForm({
-  isLoading,
-  setIsLoading,
-}: {
-  isLoading: boolean;
-  setIsLoading: (loading: boolean) => void;
-}) {
-  const { login, isReadyToRegister, localRegister, setIsReadyToRegister } =
-    useAuthStore();
+function SignForm() {
+  const {
+    login,
+    isReadyToRegister,
+    localRegister,
+    setIsReadyToRegister,
+    isCheckingAuth,
+    isAuthenticated,
+  } = useAuthStore();
   const formRef = useRef<HTMLFormElement | null>(null);
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,6 +25,10 @@ function SignForm({
     password: "",
     provider: "local",
   });
+  const [localIsLoading, setLocalIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const isLoading = isCheckingAuth || localIsLoading;
 
   useEffect(() => {
     const isValid = formRef?.current?.checkValidity();
@@ -73,7 +78,7 @@ function SignForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLocalIsLoading(true);
     if (isReadyToRegister.isReady) {
       setConfirmError(
         confirmPassword && authData.password !== confirmPassword
@@ -85,12 +90,13 @@ function SignForm({
       if (errors.length || confirmError) return;
       else {
         await localRegister(authData.email, authData.password);
-        setIsLoading(false);
+        setLocalIsLoading(false);
         return;
       }
     }
     await login(authData);
-    setIsLoading(false);
+    setLocalIsLoading(false);
+    if (isAuthenticated) navigate("/realtime-chat");
   };
 
   return (
@@ -172,24 +178,15 @@ function SignForm({
         </Button>
         <Button
           className="w-[calc(66%-2px)]"
-          variant="outline"
+          variant="link"
           onClick={(e) => {
             e.preventDefault();
+            setIsReadyToRegister(!isReadyToRegister.isReady);
           }}
         >
-          Forgot Password?
+          {isReadyToRegister.isReady ? "Cancel" : "Create an account"}
         </Button>
       </div>
-      <Button
-        className="w-full"
-        variant="link"
-        onClick={(e) => {
-          e.preventDefault();
-          setIsReadyToRegister(!isReadyToRegister.isReady);
-        }}
-      >
-        {isReadyToRegister.isReady ? "Cancel" : "Create an account"}
-      </Button>
     </form>
   );
 }

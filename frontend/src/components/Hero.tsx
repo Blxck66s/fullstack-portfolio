@@ -80,20 +80,33 @@ const Hero = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="z-1 mx-2 my-2 mb-5 flex h-5 items-center justify-center gap-2 text-xs font-semibold max-sm:flex-wrap sm:h-10 sm:gap-4 sm:text-base">
-        <div className="flex shrink-0 items-center gap-1">
-          <Cake className="h-4 w-4" />
-          {dayjs().diff(dayjs("1998-03-28"), "year")} y/o
+      <CardContent className="z-1 mx-2 my-5 flex h-fit flex-col items-center justify-center gap-2 text-xs font-semibold max-sm:flex-wrap sm:gap-4 sm:text-base">
+        <div className="flex">
+          <div className="flex shrink-0 items-center gap-1">
+            <Cake className="h-4 w-4" />
+            {dayjs().diff(dayjs("1998-03-28"), "year")} y/o
+          </div>
+          <Separator orientation="vertical" className="max-[420px]:hidden" />
+          <div className="flex shrink-0 items-center gap-1">
+            <Mic className="h-4 w-4" />
+            Thai & English
+          </div>
+          <Separator orientation="vertical" className="max-[420px]:hidden" />
+          <div className="flex shrink-0 items-center gap-1">
+            <MapPinHouse className="h-4 w-4" />
+            Bangkok, Thailand
+          </div>
         </div>
-        <Separator orientation="vertical" className="max-[420px]:hidden" />
-        <div className="flex shrink-0 items-center gap-1">
-          <Mic className="h-4 w-4" />
-          Thai & English
-        </div>
-        <Separator orientation="vertical" className="max-[420px]:hidden" />
-        <div className="flex shrink-0 items-center gap-1">
-          <MapPinHouse className="h-4 w-4" />
-          Bangkok, Thailand
+        <div className="font-normal">
+          <p className="text-center font-semibold">
+            2 years of work experience as a Backend Developer
+          </p>
+          <p className="text-left">
+            Specializing in JavaScript and TypeScript, mainly using Node.js with
+            frameworks such as Express.js and NestJS. I have hands-on experience
+            with databases including PostgreSQL, MySQL, and MongoDB, using ORMs
+            like Prisma and Sequelize
+          </p>
         </div>
       </CardContent>
     </Card>

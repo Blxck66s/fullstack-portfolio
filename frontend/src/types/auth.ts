@@ -1,21 +1,18 @@
 export interface AuthUser {
-  name: string;
+  id: string;
   email: string;
-  provider: string;
+  name: string;
   avatarUrl?: string;
-  tokenExpiry?: number;
+  role: string;
+  providers: { providerId: string; provider: string }[];
+  exp: number;
+  isOnline: boolean;
 }
 
 export interface AuthLogin {
   provider: string;
   email?: string;
   password?: string;
-}
-
-export interface LogEntry {
-  time: string;
-  message: string;
-  type: "info" | "success" | "error" | "warning";
 }
 
 export interface JWTToken {
@@ -32,17 +29,6 @@ export interface JWTToken {
     exp: number;
   };
   signature: string;
-}
-
-export interface GitHubConfig {
-  owner: string;
-  repo: string;
-  branch: string;
-  paths: {
-    server: string;
-    routes: string;
-    middleware: string;
-  };
 }
 
 export const ACCESS_TOKEN_EXPIRE_TIME = 15 * 60; // 15 minutes in seconds

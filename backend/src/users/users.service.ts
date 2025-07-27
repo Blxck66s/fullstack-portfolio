@@ -62,4 +62,11 @@ export class UsersService {
       },
     });
   }
+
+  async updateUserOnlineStatus(userId: string, isOnline: boolean) {
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: { isOnline },
+    });
+  }
 }

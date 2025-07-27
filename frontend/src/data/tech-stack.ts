@@ -29,8 +29,8 @@ export const techStackData = {
     ],
   },
   backend: {
+    runtimes: [{ name: "Node.js", icon: "nodejs-logo.png" }],
     frameworks: [
-      { name: "Node.js", icon: "nodejs-logo.png" },
       { name: "Express.js", icon: "express-js-logo.png" },
       { name: "NestJS", icon: "nestjs-logo.png" },
     ],

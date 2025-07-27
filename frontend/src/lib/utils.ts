@@ -16,6 +16,7 @@ export function reverseKebabCase(str: string) {
 }
 
 export function validatePassword(password: string) {
+  if (!password) return [];
   const rules = [
     { regex: /.{8,64}/, message: "8-64 characters" },
     {
